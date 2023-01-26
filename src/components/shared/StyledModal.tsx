@@ -1,7 +1,7 @@
 import React, { HTMLAttributes } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { Dialog } from '@headlessui/react';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 
 export interface IModalProps {
   open: boolean;
@@ -10,8 +10,7 @@ export interface IModalProps {
 interface IStyledModalProps extends IModalProps {
   title: string;
   className?: HTMLAttributes<'div'>['className'];
-  children?: React.ReactElement | React.ReactElement[] | string | null;
-  panelWidth?: string | number;
+  children?: React.ReactElement | React.ReactElement[] | string;
 }
 
 export const StyledModal: React.FC<IStyledModalProps> = ({
@@ -19,7 +18,6 @@ export const StyledModal: React.FC<IStyledModalProps> = ({
   hideModal,
   title,
   className,
-  panelWidth,
   children,
 }) => {
   return (
@@ -28,13 +26,13 @@ export const StyledModal: React.FC<IStyledModalProps> = ({
 
       <Dialog.Panel
         className={
-          'bg-white px-11 pb-11 rounded-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[calc(100%-24px)] max-w-[calc(100%-24px)] w-full ' +
+          'bg-white px-11 pb-11 rounded-2xl overflow-scroll z-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[calc(100%-24px)] max-w-[calc(100%-24px)] w-full ' +
           className
         }>
         <div className="absolute top-0 w-full">
-          <button onClick={hideModal} className="absolute top-4 right-8 -translate-x-full">
+          <IconButton onClick={hideModal} className="absolute top-4 right-8 -translate-x-full">
             <XMarkIcon className="w-6" />
-          </button>
+          </IconButton>
         </div>
 
         <div className="h-16"></div>

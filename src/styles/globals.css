@@ -9,3 +9,7 @@
 html {
   scroll-behavior: smooth;
 }
+
+.MuiButton-contained {
+  background-color: #3993ff;
+}

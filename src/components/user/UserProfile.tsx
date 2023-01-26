@@ -15,7 +15,6 @@ export const UserProfile: React.FC = () => {
   const [user] = useAuthState(auth);
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const [signOut, loading, error] = useSignOut(auth);
-  console.log(user?.photoURL);
 
   return (
     <Menu as="div" className="">
@@ -24,7 +23,7 @@ export const UserProfile: React.FC = () => {
           {user?.photoURL ? (
             <Image src={user.photoURL} width="32" height="32" alt="user photo" />
           ) : (
-            <span>user?.displayName!.charAt(0)</span>
+            <span>{user?.displayName!.charAt(0)}</span>
           )}
         </div>
         {user!.displayName}

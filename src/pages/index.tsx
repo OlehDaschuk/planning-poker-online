@@ -25,8 +25,9 @@ export default function Home() {
             </div>
             <div>
               <Link href="/new-game">
-                {/* TODO */}
-                <Button>Start new game</Button>
+                <Button variant="contained" color="primary">
+                  Start new game
+                </Button>
               </Link>
             </div>
           </div>
