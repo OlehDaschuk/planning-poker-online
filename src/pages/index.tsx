@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
 import Button from '@mui/material/Button';
 
-import Footer from '@/components/shared/Footer';
-import Header from '@/components/shared/Header';
+import { Header, Footer } from '@/components/shared/home-page';
+
+import {} from '../store';
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
         <title>Planning poker online | Home</title>
       </Head>
 
-      <Header Logo={() => <Image width="189" height="40" src="/full-logo.svg" alt="logo" />} />
+      <Header />
 
       <main className="pt-40 flex">
         <section className="mx-auto flex items-center justify-between flex-wrap max-w-[108rem]">

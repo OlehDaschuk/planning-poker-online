@@ -1,8 +1,9 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Bars3Icon } from '@heroicons/react/24/solid';
-import { AppBar, Container, Box, Button, IconButton } from '@mui/material';
+import { AppBar, Box, Button, IconButton } from '@mui/material';
 
 import { auth } from '@/firebase';
 import { UserProfile } from '@/components/user/UserProfile';
@@ -10,12 +11,14 @@ import { PricingModal } from '@/components/payment/PricingModal';
 import { SignUpModal } from '@/components/auth/modals/SignUpModal';
 import { LoginModal } from '@/components/auth/modals/LoginModal';
 
-export default function Header({ Logo }: { Logo: React.FC }) {
+export const Header = () => {
   const [openPricingModal, setOpenPricingModal] = useState(false);
   const [openSignUpModal, setOpenSignUpModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
 
   const [user, loading] = useAuthState(auth);
+  console.log(auth.currentUser?.uid);
+  console.log(user?.uid === 'U2suSeZcbFYypoli31QSLV5xjM23');
 
   return (
     <>
@@ -29,7 +32,7 @@ export default function Header({ Logo }: { Logo: React.FC }) {
         }}>
         <Box sx={{ p: { md: '0 20px 0 40px' } }}>
           <Link href="/" title="Planning Poker Online" className="max-w-[219px]:ml-6">
-            <Logo />
+            <Image width="189" height="40" src="/full-logo.svg" alt="logo" />
           </Link>
         </Box>
 
@@ -92,4 +95,4 @@ export default function Header({ Logo }: { Logo: React.FC }) {
       />
     </>
   );
-}
+};
