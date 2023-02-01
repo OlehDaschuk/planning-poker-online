@@ -13,7 +13,7 @@ export const CopyToClipboardButton: React.FC<IProps> = ({ sx, copyText, children
   // ?: should i wrap in useCallback
   const handleClick = () => {
     setOpen(true);
-    navigator.clipboard.writeText(window.location.toString());
+    navigator.clipboard.writeText(copyText);
   };
   return (
     <>

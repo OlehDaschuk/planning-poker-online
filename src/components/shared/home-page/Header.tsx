@@ -2,10 +2,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+
 import { Bars3Icon } from '@heroicons/react/24/solid';
 import { AppBar, Box, Button, IconButton } from '@mui/material';
 
 import { auth } from '@/firebase';
+
 import { UserProfile } from '@/components/user/UserProfile';
 import { PricingModal } from '@/components/payment/PricingModal';
 import { SignUpModal } from '@/components/auth/modals/SignUpModal';
@@ -17,8 +19,6 @@ export const Header = () => {
   const [openLoginModal, setOpenLoginModal] = useState(false);
 
   const [user, loading] = useAuthState(auth);
-  console.log(auth.currentUser?.uid);
-  console.log(user?.uid === 'U2suSeZcbFYypoli31QSLV5xjM23');
 
   return (
     <>

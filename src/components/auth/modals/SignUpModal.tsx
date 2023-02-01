@@ -45,7 +45,7 @@ export const SignUpModal: React.FC<ISignUpModalProps> = ({ open, hideModal, open
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+    // console.log(data);
 
     sendSignInLinkToEmail(data.email, actionCodeSettings);
   };

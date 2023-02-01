@@ -41,7 +41,7 @@ export const LoginModal: React.FC<IModalProps & { openSignUpmodal: () => void }>
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+    // console.log(data);
 
     sendSignInLinkToEmail(data.email, actionCodeSettings);
   };

@@ -1,38 +1,70 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { doc } from 'firebase/firestore';
+import { useEffect } from 'react';
+import { QuerySnapshot, collection, addDoc, getDocs, doc } from 'firebase/firestore';
 import { useDocumentOnce } from 'react-firebase-hooks/firestore';
+import { BottomNavigation, unstable_createMuiStrictModeTheme } from '@mui/material';
 
 import { firestore } from '@/firebase';
 
-import { Header } from '@/components/shared/session-page';
+import { Header, Deck, CardSection } from '@/components/game/session-page';
+import { Cards } from '@/components/game/Cards';
+import useBeforeUnload from '@/hooks/useBeforeUnload';
+import { gameSessionStore } from '@/store';
 
-type Data = {};
+// TODO: make clipboard via window.location.href
 
-export const getServerSideProps: GetServerSideProps<Data, { sessionId: string }> = async (ctx) => {
-  // console.log(ctx);
+export const getServerSideProps: GetServerSideProps<{}, { sessionId: string }> = async (ctx) => {
+  const querySnapshot = await getDocs(collection(firestore, 'session'));
 
-  console.log(ctx.query.sessionId);
-
-  // TODO: write logic to notFound via firebase
-  if (true) return { notFound: true };
-
-  return { props: {} };
+  return {
+    notFound: querySnapshot.docs.findIndex((doc) => doc.id === ctx.query.sessionId) === -1,
+    props: {},
+  };
 };
 
-export default function GameRoom({}) {
-  // const router = useRouter();
-  // console.log(router.query.sessionId);
-  // console.log(1234);
+type SessionData = {};
 
-  // const [value, loading, error] = useDocumentOnce(
-  //   doc(firestore, 'session', router.query.sessionId as string)
-  // );
+async function hendleWindowClose() {
+  try {
+    const docRef = await addDoc(collection(firestore, 'tasting'), {
+      first: 'Ada',
+      last: 'Lovelace',
+      born: 1815,
+    });
+    console.log('Document written with ID: ', docRef.id);
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+}
+
+export default function GameRoom() {
+  const router = useRouter();
+
+  const [snapshot, loading, error, reload] = useDocumentOnce<SessionData>(
+    doc(firestore, 'session', router.query.sessionId as string)
+  );
+  console.log(snapshot?.data());
+
+  // ?: how to implement user disconection
+  // useEffect(() => {
+  //   window.addEventListener('unload', alertUser);
+  //   return () => {
+  //     window.removeEventListener('unload', alertUser);
+  //     gameSessionStore.onLeavingSesion();
+  //   };
+  // }, []);
+
+  // const alertUser = (e) => {
+  //   e.preventDefault();
+  //   e.returnValue = '';
+  // };
 
   return (
-    <>
+    <div className="bg-[#f9f9f9]">
       <Header />
-      fadsfafa
-    </>
+
+      <Deck />
+    </div>
   );
 }

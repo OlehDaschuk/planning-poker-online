@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, TextField, Alert, Box } from '@mui/material';
-import { Card, CardActionArea } from '@mui/material';
 
 import { IDeck } from '@/interfaces/game/deck';
+import { Cards } from '@/components/game/Cards';
+import { useStore } from '@/hooks/useStore';
 
 interface Inputs {
   deckName: string;
@@ -11,12 +12,12 @@ interface Inputs {
 }
 
 interface IProps {
-  deckVariants: IDeck[];
   hideModal: () => void;
 }
 
-export const CreateCustomDeckForm: React.FC<IProps> = ({ deckVariants, hideModal }) => {
-  const [selectedCard, setSelectedCard] = useState<number | null>(null);
+export const CreateCustomDeckForm: React.FC<IProps> = ({ hideModal }) => {
+  const decksStore = useStore((s) => s.decksStore);
+
   const {
     register,
     handleSubmit,
@@ -25,7 +26,7 @@ export const CreateCustomDeckForm: React.FC<IProps> = ({ deckVariants, hideModal
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     hideModal();
-    deckVariants.push({
+    decksStore.addDeck({
       name: data.deckName,
       values: data.deckValues,
     });
@@ -44,7 +45,7 @@ export const CreateCustomDeckForm: React.FC<IProps> = ({ deckVariants, hideModal
           {...register('deckName', {
             required: true,
             validate: (value) =>
-              deckVariants.findIndex((deck) => deck.name === value) === -1 || 'Error', // TODO: think of error message
+              decksStore.deckVariants.findIndex((deck) => deck.name === value) === -1 || 'Error', // TODO: think of error message
           })}
         />
 
@@ -75,38 +76,7 @@ export const CreateCustomDeckForm: React.FC<IProps> = ({ deckVariants, hideModal
           <p>This is a preview of how your deck will look like.</p>
         </div>
 
-        <div className="flex justify-center p-4 w-fu overflow-x-scroll text-[#3993ff]">
-          {watch('deckValues')?.map((option, idx) => {
-            return (
-              <div
-                key={idx}
-                className={`min-w-[48px] max-w-[48px] h-20 mx-2 rounded-lg border-[#3993ff] border-2 cursor-pointer flex justify-center items-center ${
-                  selectedCard === idx ? 'text-white bg-[#3993ff] mt-[-8px]' : 'hover:mt-[-2.5px]'
-                }`}
-                onClick={() => setSelectedCard(idx)}>
-                <span>{option}</span>
-              </div>
-              // <Box
-              //   key={idx}
-              //   sx={{
-              //     minWidth: '48px',
-              //     maxWidth: '48px',
-              //     height: '80px',
-              //     mx: '8px',
-              //     color: '#fff',
-              //     border: '2px solid #3993ff',
-              //     borderRadius: '8px',
-              //     display: 'flex',
-              //     justifyContent: 'center',
-              //     alignItems: 'center',
-              //     cursor: 'pointer',
-              //     ':hover': { mt: '-2.5px' },
-              //   }}>
-              //   <span>{option}</span>
-              // </Box>
-            );
-          })}
-        </div>
+        <Cards deckValues={watch('deckValues')} />
 
         <div className="flex gap-4 mt-8 h-12">
           <Button fullWidth variant="contained" className="bg-white" onClick={hideModal}>
