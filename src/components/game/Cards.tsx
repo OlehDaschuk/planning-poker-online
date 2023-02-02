@@ -1,13 +1,17 @@
-import { IDeck } from '@/interfaces/game/deck';
 import React, { useState } from 'react';
+import { observer } from 'mobx-react-lite';
 
-export const Cards: React.FC<{ deckValues: IDeck['values'] }> = ({ deckValues }) => {
+import { useStore } from '@/hooks/useStore';
+
+export const Cards: React.FC = observer(() => {
+  const decksStore = useStore((s) => s.decksStore);
+  const values = decksStore.currentDeck.values;
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
   return (
     <>
       <div className="flex justify-center p-4 w-full overflow-x-scroll text-[#3993ff]">
-        {deckValues?.map((option, idx) => {
+        {values?.map((option, idx) => {
           return (
             <div
               key={idx}
@@ -22,4 +26,4 @@ export const Cards: React.FC<{ deckValues: IDeck['values'] }> = ({ deckValues })
       </div>
     </>
   );
-};
+});

@@ -21,7 +21,6 @@ export const CreateCustomDeckForm: React.FC<IProps> = ({ hideModal }) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -76,7 +75,7 @@ export const CreateCustomDeckForm: React.FC<IProps> = ({ hideModal }) => {
           <p>This is a preview of how your deck will look like.</p>
         </div>
 
-        <Cards deckValues={watch('deckValues')} />
+        <Cards />
 
         <div className="flex gap-4 mt-8 h-12">
           <Button fullWidth variant="contained" className="bg-white" onClick={hideModal}>

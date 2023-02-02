@@ -30,20 +30,7 @@ export class GameSessionStore {
     }
   }
 
-  // async onSessionCreation() {
-  //   try {
-  //     const sesionRef = await addDoc(collection(firestore, 'users'), {
-  //       first: 'Ada',
-  //       last: 'Lovelace',
-  //       born: 1815,
-  //     });
-  //     console.log('Document written with ID: ', sesionRef.id);
-  //   } catch (e) {
-  //     console.error('Error adding document: ', e);
-  //   }
-  // }
-
-  onSessionConnection(sessionId: string, name: string, initDeck: IDeck) {}
+  onSessionConnection(sessionId: string) {}
 
   onLeavingSesion() {
     this.currentSession = null;
