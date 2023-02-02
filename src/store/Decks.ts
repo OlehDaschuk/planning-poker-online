@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx';
 
 import type { IDeck } from '@/interfaces/game/deck';
 
-class DecksStore {
+export class DecksStore {
   deckVariants: IDeck[] = [
     {
       name: 'Fibonacci',
@@ -29,7 +29,7 @@ class DecksStore {
   }
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, { deckObjectToString: false }, { deep: false });
   }
 
   setCurrnetDeck(selected: IDeck) {
@@ -42,4 +42,3 @@ class DecksStore {
 }
 
 export const decksStore = new DecksStore();
-export type DecksState = DecksStore;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { TextField, FormControl, InputLabel, MenuItem, Select, Button } from '@mui/material';
 import { observer } from 'mobx-react-lite';
@@ -9,7 +10,7 @@ import { useStore } from '@/hooks/useStore';
 import { CreateCustomDeckForm } from '@/components/game/forms/CreateCustomDeckForm';
 import { StyledModal } from '@/components/shared/StyledModal';
 
-export const deckObjectToString = (deck: IDeck) => `${deck.name} ( ${deck.values.join(', ')} )`;
+// export const deckObjectToString = (deck: IDeck) => `${deck.name} ( ${deck.values.join(', ')} )`;
 
 interface Inputs {
   gameName: string;
@@ -18,20 +19,24 @@ interface Inputs {
 
 export const CreateNewGameForm: React.FC = observer(() => {
   const decksStore = useStore((s) => s.decksStore);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const gameSessionStore = useStore((s) => s.gameSessionStore);
 
+  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    if (!data.gameName) data.gameName = 'Planning poker online';
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (!data.gameName.trim()) data.gameName = 'Planning poker online';
     console.log(data);
+    // console.log('' + decksStore.currentDeck);
 
     // TODO: ....
-    // gameSessionStore.onSessionCreation(data.gameName, data.votingSystem);
+    await gameSessionStore.onSessionCreation(data.gameName);
+    router.push('/sessionId', `/${gameSessionStore.currentSession?.id}`);
   };
   return (
     <>
@@ -45,14 +50,14 @@ export const CreateNewGameForm: React.FC = observer(() => {
             margin="dense"
             value={decksStore.currentDeck}
             label="Voting system"
-            renderValue={deckObjectToString}
+            renderValue={decksStore.deckObjectToString}
             {...register('votingSystem', {
               onChange: (e) => decksStore.setCurrnetDeck(e.target.value as IDeck),
             })}>
             {decksStore.deckVariants.map((deck, idx) => {
               return (
                 <MenuItem key={idx} value={deck as any}>
-                  {deckObjectToString(deck)}
+                  {decksStore.deckObjectToString(deck)}
                 </MenuItem>
               );
             })}
