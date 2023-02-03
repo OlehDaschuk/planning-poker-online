@@ -2,13 +2,11 @@ import Link from 'next/link';
 import { useSignInWithGoogle, useSendSignInLinkToEmail } from 'react-firebase-hooks/auth';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, TextField, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 
 import { auth } from '@/firebase';
 import { StyledModal, IModalProps } from '@/components/shared/StyledModal';
-
-interface ISignUpModalProps extends IModalProps {
-  openLoginModal: () => void;
-}
+import { useStore } from '@/hooks/useStore';
 
 interface Inputs {
   email: string;
@@ -34,9 +32,11 @@ const actionCodeSettings = {
   handleCodeInApp: true,
 };
 
-export const SignUpModal: React.FC<ISignUpModalProps> = ({ open, hideModal, openLoginModal }) => {
+export const SignUpModal: React.FC = observer(() => {
   const [sendSignInLinkToEmail, sendingLinkToEmail] = useSendSignInLinkToEmail(auth);
   const [signInWithGoogle] = useSignInWithGoogle(auth);
+
+  const modalsHanderStore = useStore((s) => s.modalsHanderStore);
 
   const {
     register,
@@ -51,7 +51,11 @@ export const SignUpModal: React.FC<ISignUpModalProps> = ({ open, hideModal, open
   };
 
   return (
-    <StyledModal open={open} hideModal={hideModal} title="Sign up" className="w-[440px]">
+    <StyledModal
+      open={modalsHanderStore.openSignUpModal}
+      hideModal={() => modalsHanderStore.setOpenSignUpModal(false)}
+      title="Sign up"
+      className="w-[440px]">
       <Button
         startIcon={<img src="/google-login-icon.svg" alt="google-icon" />}
         fullWidth
@@ -59,7 +63,7 @@ export const SignUpModal: React.FC<ISignUpModalProps> = ({ open, hideModal, open
         variant="contained"
         sx={{ display: 'flex' }}
         onClick={() => {
-          hideModal();
+          modalsHanderStore.setOpenSignUpModal(false);
           signInWithGoogle();
         }}>
         <span className="grow">Sign up with Google</span>
@@ -114,12 +118,12 @@ export const SignUpModal: React.FC<ISignUpModalProps> = ({ open, hideModal, open
         <button
           className="text-[#3993ff] font-bold"
           onClick={() => {
-            hideModal();
-            openLoginModal();
+            modalsHanderStore.setOpenSignUpModal(false);
+            modalsHanderStore.setOpenLoginModal(true);
           }}>
           Login
         </button>
       </p>
     </StyledModal>
   );
-};
+});

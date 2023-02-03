@@ -1,24 +1,22 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useState, useEffect } from 'react';
+import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { QuerySnapshot, collection, addDoc, getDocs, doc } from 'firebase/firestore';
-import { useDocumentOnce } from 'react-firebase-hooks/firestore';
-import { BottomNavigation, unstable_createMuiStrictModeTheme } from '@mui/material';
+import { QuerySnapshot, collection, addDoc, getDoc, doc } from 'firebase/firestore';
+import { useDocument } from 'react-firebase-hooks/firestore';
 
-import { firestore } from '@/firebase';
+import { firestore, auth } from '@/firebase';
+import useBeforeUnload from '@/hooks/useBeforeUnload';
 
 import { Header, Deck, CardSection } from '@/components/game/session-page';
-import { Cards } from '@/components/game/Cards';
-import useBeforeUnload from '@/hooks/useBeforeUnload';
-import { gameSessionStore } from '@/store';
+import { StyledModal } from '@/components/shared/StyledModal';
 
 // TODO: make clipboard via window.location.href
 
 export const getServerSideProps: GetServerSideProps<{}, { sessionId: string }> = async (ctx) => {
-  const querySnapshot = await getDocs(collection(firestore, 'session'));
+  const sessionSnap = await getDoc(doc(firestore, 'session', ctx.query.sessionId as string));
 
   return {
-    notFound: querySnapshot.docs.findIndex((doc) => doc.id === ctx.query.sessionId) === -1,
+    notFound: !sessionSnap.exists(),
     props: {},
   };
 };
@@ -39,12 +37,19 @@ async function hendleWindowClose() {
 }
 
 export default function GameRoom() {
+  const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const [snapshot, loading, error, reload] = useDocumentOnce<SessionData>(
+  const [snapshot, loading, error] = useDocument<SessionData>(
     doc(firestore, 'session', router.query.sessionId as string)
   );
   console.log(snapshot?.data());
+
+  useEffect(() => {
+    if (!auth.currentUser) {
+      setOpen(true);
+    }
+  }, []);
 
   // ?: how to implement user disconection
   // useEffect(() => {
@@ -61,10 +66,17 @@ export default function GameRoom() {
   // };
 
   return (
-    <div className="bg-[#f9f9f9]">
-      <Header />
+    <>
+      <div className="bg-[#f9f9f9]">
+        <Header />
 
-      <Deck />
-    </div>
+        <Deck />
+      </div>
+
+      <StyledModal
+        title="Choose your display name"
+        open={open}
+        hideModal={() => setOpen(false)}></StyledModal>
+    </>
   );
 }

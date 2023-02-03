@@ -1,9 +1,11 @@
 import { useSignInWithGoogle, useSendSignInLinkToEmail } from 'react-firebase-hooks/auth';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, TextField } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 
 import { StyledModal, IModalProps } from '@/components/shared/StyledModal';
 import { auth } from '@/firebase';
+import { useStore } from '@/hooks/useStore';
 
 interface Inputs {
   email: string;
@@ -26,13 +28,11 @@ const actionCodeSettings = {
   handleCodeInApp: true,
 };
 
-export const LoginModal: React.FC<IModalProps & { openSignUpmodal: () => void }> = ({
-  open,
-  hideModal,
-  openSignUpmodal,
-}) => {
+export const LoginModal: React.FC = observer(() => {
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const [sendSignInLinkToEmail, sending] = useSendSignInLinkToEmail(auth);
+
+  const modalsHanderStore = useStore((s) => s.modalsHanderStore);
 
   const {
     register,
@@ -42,12 +42,15 @@ export const LoginModal: React.FC<IModalProps & { openSignUpmodal: () => void }>
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     // console.log(data);
-
-    sendSignInLinkToEmail(data.email, actionCodeSettings);
+    // sendSignInLinkToEmail(data.email, actionCodeSettings);
   };
 
   return (
-    <StyledModal open={open} hideModal={hideModal} title="Login" className="w-[440px]">
+    <StyledModal
+      open={modalsHanderStore.openLoginModal}
+      hideModal={() => modalsHanderStore.setOpenLoginModal(false)}
+      title="Login"
+      className="w-[440px]">
       <Button
         startIcon={<img src="/google-login-icon.svg" alt="google-icon" />}
         fullWidth
@@ -55,7 +58,7 @@ export const LoginModal: React.FC<IModalProps & { openSignUpmodal: () => void }>
         variant="contained"
         sx={{ display: 'flex' }}
         onClick={() => {
-          hideModal();
+          modalsHanderStore.setOpenLoginModal(false);
           signInWithGoogle();
         }}>
         <span className="grow">Login with Google</span>
@@ -84,8 +87,8 @@ export const LoginModal: React.FC<IModalProps & { openSignUpmodal: () => void }>
       <div className="flex justify-between">
         <Button
           onClick={() => {
-            hideModal();
-            openSignUpmodal();
+            modalsHanderStore.setOpenLoginModal(false);
+            modalsHanderStore.setOpenSignUpModal(true);
           }}>
           Create account
         </Button>
@@ -93,4 +96,4 @@ export const LoginModal: React.FC<IModalProps & { openSignUpmodal: () => void }>
       </div>
     </StyledModal>
   );
-};
+});

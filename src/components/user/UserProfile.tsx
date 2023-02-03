@@ -1,43 +1,85 @@
-import Image from 'next/image';
-import { Menu } from '@headlessui/react';
+import React, { useState } from 'react';
 import {
-  useAuthState,
-  useSignInWithGoogle,
-  useSendSignInLinkToEmail,
-  useCreateUserWithEmailAndPassword,
-  useSignOut,
-} from 'react-firebase-hooks/auth';
-import { ChevronDownIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
+  Avatar,
+  Divider,
+  Menu,
+  MenuItem,
+  Button,
+  ListItemIcon,
+  ListItemText,
+  Box,
+} from '@mui/material';
+import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
+import { ChevronDownIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/solid';
 
 import { auth } from '@/firebase';
+import { useStore } from '@/hooks/useStore';
 
 export const UserProfile: React.FC = () => {
   const [user] = useAuthState(auth);
-  const [signInWithGoogle] = useSignInWithGoogle(auth);
-  const [signOut, loading, error] = useSignOut(auth);
+  const [signOut] = useSignOut(auth);
+
+  const modalsHanderStore = useStore((s) => s.modalsHanderStore);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   return (
-    <Menu as="div" className="">
-      <Menu.Button className="flex items-center gap-2 rounded-lg hover:bg-[#e8e9ea]">
-        <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
-          {user?.photoURL ? (
-            <Image src={user.photoURL} width="32" height="32" alt="user photo" />
-          ) : (
-            <span>{user?.displayName!.charAt(0)}</span>
-          )}
-        </div>
+    <>
+      <Button
+        aria-controls={open ? 'demo-customized-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        variant="text"
+        startIcon={
+          <Avatar sx={{ width: 32, height: 32 }} src={user?.photoURL!} alt="user photo">
+            {user?.displayName!.charAt(0)}
+          </Avatar>
+        }
+        endIcon={<ChevronDownIcon width="16" />}
+        onClick={(e) => setAnchorEl(e.currentTarget)}>
         {user!.displayName}
-        <ChevronDownIcon className="w-4" />
-      </Menu.Button>
+      </Button>
 
-      <Menu.Items className="w-80 absolute shadow-[0_4px_8px_hsl(204deg_6%_68%_/_40%)] rounded-lg">
-        <Menu.Item as="button" className="cursor-pointer flex" onClick={signOut}>
-          <span>
-            <ArrowLeftOnRectangleIcon />
-          </span>
-          <span>Sign Out</span>
-        </Menu.Item>
-      </Menu.Items>
-    </Menu>
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={open}
+        onClose={() => setAnchorEl(null)}
+        sx={{ borderRadius: '8px' }}
+        MenuListProps={{ sx: { width: '300px' } }}>
+        <div className="pl-6 h-[120px] flex items-center">
+          <Avatar sx={{ width: 64, height: 64 }} src={user?.photoURL!} alt="user photo">
+            {user?.displayName!.charAt(0)}
+          </Avatar>
+
+          <div className="pl-4">{user!.displayName}</div>
+        </div>
+
+        <Box sx={{ px: '1rem', mb: '1rem' }}>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={() => modalsHanderStore.setOpenPricingModal(true)}>
+            Start free trial
+          </Button>
+        </Box>
+
+        <Divider />
+
+        <MenuItem onClick={signOut}>
+          <ListItemIcon>
+            <ArrowRightOnRectangleIcon />
+          </ListItemIcon>
+          <ListItemText>Sign out</ListItemText>
+        </MenuItem>
+      </Menu>
+    </>
   );
 };

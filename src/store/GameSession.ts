@@ -3,6 +3,7 @@ import { collection, addDoc, getDoc, doc } from 'firebase/firestore';
 import type { DocumentReference, DocumentSnapshot } from 'firebase/firestore';
 
 import { firestore } from '@/firebase';
+import { DecksStore } from './Decks';
 
 import type { IDeck } from '@/interfaces/game/deck';
 import type { ISession } from '@/interfaces/game/session';
@@ -10,27 +11,34 @@ import type { ISession } from '@/interfaces/game/session';
 export class GameSessionStore {
   currentSession: ISession | null = null;
 
+  decksStoreInCurrentSession = new DecksStore();
+
   constructor() {
     makeAutoObservable(this);
   }
 
-  // TODO: make it with flow
-  *onSessionCreation<D extends ISession, T extends DocumentReference<D> | DocumentSnapshot<D>>(
-    name: string
-  ): Generator<Promise<T>> {
+  // TODO: fix type error
+  *onSessionCreation<
+    D extends Partial<ISession>,
+    T extends DocumentReference<D> | DocumentSnapshot<D>
+  >(name: string): Generator<Promise<T>> {
     try {
       const sesionRef = yield addDoc<D>(collection(firestore, 'session'), { name });
 
       const sesion = yield getDoc<D>(doc(firestore, 'users', sesionRef.id));
-      console.log('Document written with ID: ', sesion.data());
-      this.currentSession = { id: sesion.id, ...sesion.data() };
-      console.log(this.currentSession);
     } catch (e) {
-      console.error('Error adding document: ', e);
+      console.error('Error adding/getting document: ', e);
     }
   }
 
-  onSessionConnection(sessionId: string) {}
+  *onSessionConnection(sessionId: string) {
+    try {
+      const sesion = yield getDoc(doc(firestore, 'users', sessionId));
+      this.currentSession = { id: sesion.id, ...sesion.data() };
+    } catch (e) {
+      console.error('Error getting document: ', e);
+    }
+  }
 
   onLeavingSesion() {
     this.currentSession = null;

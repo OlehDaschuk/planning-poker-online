@@ -1,22 +1,18 @@
-import { Dialog } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/solid';
-
+import { observer } from 'mobx-react-lite';
 import { StyledModal } from '@/components/shared/StyledModal';
+import { useStore } from '@/hooks/useStore';
 
-interface IModalProps {
-  open: boolean;
-  hideModal: () => void;
-}
+export const PricingModal: React.FC = observer(() => {
+  const modalsHanderStore = useStore((s) => s.modalsHanderStore);
 
-export const PricingModal: React.FC<IModalProps> = ({ open, hideModal }) => {
   return (
     <StyledModal
-      open={open}
-      hideModal={hideModal}
+      open={modalsHanderStore.openPricingModal}
+      hideModal={() => modalsHanderStore.setOpenPricingModal(false)}
       title="Upgrade Planning Poker Online"
       className="w-full h-full">
       Soon...
     </StyledModal>
     // TODO: add content for prices
   );
-};
+});

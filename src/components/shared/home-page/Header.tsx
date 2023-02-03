@@ -7,24 +7,20 @@ import { Bars3Icon } from '@heroicons/react/24/solid';
 import { AppBar, Box, Button, IconButton } from '@mui/material';
 
 import { auth } from '@/firebase';
+import { useStore } from '@/hooks/useStore';
 
 import { UserProfile } from '@/components/user/UserProfile';
-import { PricingModal } from '@/components/payment/PricingModal';
-import { SignUpModal } from '@/components/auth/modals/SignUpModal';
-import { LoginModal } from '@/components/auth/modals/LoginModal';
 
 export const Header = () => {
-  const [openPricingModal, setOpenPricingModal] = useState(false);
-  const [openSignUpModal, setOpenSignUpModal] = useState(false);
-  const [openLoginModal, setOpenLoginModal] = useState(false);
-
   const [user, loading] = useAuthState(auth);
+  const modalsHanderStore = useStore((s) => s.modalsHanderStore);
 
   return (
     <>
       <AppBar
         color="inherit"
         sx={{
+          zIndex: 5,
           height: { xs: '5rem', md: '6.25rem' },
           flexDirection: 'row',
           alignItems: 'center',
@@ -53,7 +49,7 @@ export const Header = () => {
                 display: 'flex',
                 alignItems: 'center',
               }}>
-              <Button variant="text" onClick={() => setOpenPricingModal(true)}>
+              <Button variant="text" onClick={() => (modalsHanderStore.openPricingModal = true)}>
                 Pricing
               </Button>
             </Box>
@@ -62,10 +58,10 @@ export const Header = () => {
               <UserProfile />
             ) : (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                <Button variant="text" onClick={() => setOpenSignUpModal(true)}>
+                <Button variant="text" onClick={() => (modalsHanderStore.openSignUpModal = true)}>
                   Sign Up
                 </Button>
-                <Button variant="text" onClick={() => setOpenLoginModal(true)}>
+                <Button variant="text" onClick={() => (modalsHanderStore.openLoginModal = true)}>
                   Login
                 </Button>
               </Box>
@@ -79,20 +75,6 @@ export const Header = () => {
           </Box>
         </div>
       </AppBar>
-
-      <PricingModal open={openPricingModal} hideModal={() => setOpenPricingModal(false)} />
-
-      <SignUpModal
-        open={openSignUpModal}
-        hideModal={() => setOpenSignUpModal(false)}
-        openLoginModal={() => setOpenLoginModal(true)}
-      />
-
-      <LoginModal
-        open={openLoginModal}
-        hideModal={() => setOpenLoginModal(false)}
-        openSignUpmodal={() => setOpenSignUpModal(true)}
-      />
     </>
   );
 };
