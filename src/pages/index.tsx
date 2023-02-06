@@ -4,7 +4,9 @@ import Button from '@mui/material/Button';
 
 import { Header, Footer } from '@/components/shared/home-page';
 
-import {} from '../store';
+import { PricingModal } from '@/components/payment/PricingModal';
+import { LoginModal } from '@/components/auth/modals/LoginModal';
+import { SignUpModal } from '@/components/auth/modals/SignUpModal';
 
 export default function Home() {
   return (
@@ -49,6 +51,10 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      <PricingModal />
+      <LoginModal />
+      <SignUpModal />
     </>
   );
 }

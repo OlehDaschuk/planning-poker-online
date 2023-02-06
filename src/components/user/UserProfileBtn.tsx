@@ -16,7 +16,7 @@ import { ChevronDownIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/
 import { auth } from '@/firebase';
 import { useStore } from '@/hooks/useStore';
 
-export const UserProfile: React.FC = () => {
+export const UserProfileBtn: React.FC = () => {
   const [user] = useAuthState(auth);
   const [signOut] = useSignOut(auth);
 

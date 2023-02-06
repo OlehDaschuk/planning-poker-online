@@ -9,7 +9,7 @@ import { AppBar, Box, Button, IconButton } from '@mui/material';
 import { auth } from '@/firebase';
 import { useStore } from '@/hooks/useStore';
 
-import { UserProfile } from '@/components/user/UserProfile';
+import { UserProfileBtn } from '@/components/user/UserProfileBtn';
 
 export const Header = () => {
   const [user, loading] = useAuthState(auth);
@@ -55,7 +55,7 @@ export const Header = () => {
             </Box>
 
             {loading ? null : user ? (
-              <UserProfile />
+              <UserProfileBtn />
             ) : (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
                 <Button variant="text" onClick={() => (modalsHandlerStore.openSignUpModal = true)}>

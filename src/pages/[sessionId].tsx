@@ -8,7 +8,11 @@ import { firestore, auth } from '@/firebase';
 import useBeforeUnload from '@/hooks/useBeforeUnload';
 
 import { Header, Deck, CardSection } from '@/components/game/session-page';
-import { StyledModal } from '@/components/shared/StyledModal';
+
+import { PricingModal } from '@/components/payment/PricingModal';
+import { LoginModal } from '@/components/auth/modals/LoginModal';
+import { SignUpModal } from '@/components/auth/modals/SignUpModal';
+import Head from 'next/head';
 
 // TODO: make clipboard via window.location.href
 
@@ -20,8 +24,6 @@ export const getServerSideProps: GetServerSideProps<{}, { sessionId: string }> =
     props: {},
   };
 };
-
-type SessionData = {};
 
 async function hendleWindowClose() {
   try {
@@ -37,7 +39,6 @@ async function hendleWindowClose() {
 }
 
 export default function GameRoom() {
-  const [open, setOpen] = useState(false);
   const router = useRouter();
 
   // const [snapshot, loading, error] = useDocument<SessionData>(
@@ -47,8 +48,9 @@ export default function GameRoom() {
 
   useEffect(() => {
     if (!auth.currentUser) {
-      setOpen(true);
     }
+
+    return () => {};
   }, []);
 
   // ?: how to implement user disconection
@@ -67,16 +69,19 @@ export default function GameRoom() {
 
   return (
     <>
+      <Head>
+        <title>Planning poker online | </title>
+      </Head>
+
       <div className="bg-[#f9f9f9]">
         <Header />
 
         <Deck />
       </div>
 
-      <StyledModal
-        title="Choose your display name"
-        open={open}
-        hideModal={() => setOpen(false)}></StyledModal>
+      <PricingModal />
+      <LoginModal />
+      <SignUpModal />
     </>
   );
 }
