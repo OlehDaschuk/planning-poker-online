@@ -32,7 +32,7 @@ export const LoginModal: React.FC = observer(() => {
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const [sendSignInLinkToEmail, sending] = useSendSignInLinkToEmail(auth);
 
-  const modalsHanderStore = useStore((s) => s.modalsHanderStore);
+  const modalsHandlerStore = useStore((s) => s.modalsHandlerStore);
 
   const {
     register,
@@ -47,8 +47,8 @@ export const LoginModal: React.FC = observer(() => {
 
   return (
     <StyledModal
-      open={modalsHanderStore.openLoginModal}
-      hideModal={() => modalsHanderStore.setOpenLoginModal(false)}
+      open={modalsHandlerStore.openLoginModal}
+      hideModal={() => modalsHandlerStore.setOpenLoginModal(false)}
       title="Login"
       className="w-[440px]">
       <Button
@@ -58,7 +58,7 @@ export const LoginModal: React.FC = observer(() => {
         variant="contained"
         sx={{ display: 'flex' }}
         onClick={() => {
-          modalsHanderStore.setOpenLoginModal(false);
+          modalsHandlerStore.setOpenLoginModal(false);
           signInWithGoogle();
         }}>
         <span className="grow">Login with Google</span>
@@ -87,8 +87,8 @@ export const LoginModal: React.FC = observer(() => {
       <div className="flex justify-between">
         <Button
           onClick={() => {
-            modalsHanderStore.setOpenLoginModal(false);
-            modalsHanderStore.setOpenSignUpModal(true);
+            modalsHandlerStore.setOpenLoginModal(false);
+            modalsHandlerStore.setOpenSignUpModal(true);
           }}>
           Create account
         </Button>

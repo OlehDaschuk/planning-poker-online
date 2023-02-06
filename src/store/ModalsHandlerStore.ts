@@ -20,4 +20,4 @@ export class ModalsHandlerStore {
   }
 }
 
-export const modalsHanderStore = new ModalsHandlerStore();
+export const modalsHandlerStore = new ModalsHandlerStore();

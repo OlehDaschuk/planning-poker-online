@@ -40,10 +40,10 @@ export default function GameRoom() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const [snapshot, loading, error] = useDocument<SessionData>(
-    doc(firestore, 'session', router.query.sessionId as string)
-  );
-  console.log(snapshot?.data());
+  // const [snapshot, loading, error] = useDocument<SessionData>(
+  //   doc(firestore, 'session', router.query.sessionId as string)
+  // );
+  // console.log(snapshot?.data());
 
   useEffect(() => {
     if (!auth.currentUser) {
@@ -53,7 +53,7 @@ export default function GameRoom() {
 
   // ?: how to implement user disconection
   // useEffect(() => {
-  //   window.addEventListener('unload', alertUser);
+  //   window.addEventListener('unload', alertUser, {capture: });
   //   return () => {
   //     window.removeEventListener('unload', alertUser);
   //     gameSessionStore.onLeavingSesion();

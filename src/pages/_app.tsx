@@ -2,7 +2,7 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 
 import { RootStoreProvider, rootStore } from '@/store';
-import { modalsHanderStore } from '@/store/ModalsHandlerStore';
+import { modalsHandlerStore } from '@/store/ModalsHandlerStore';
 
 import NextNProgress from 'nextjs-progressbar';
 import { PricingModal } from '@/components/payment/PricingModal';

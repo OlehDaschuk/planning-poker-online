@@ -8,6 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
   Box,
+  Switch,
 } from '@mui/material';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { ChevronDownIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/solid';
@@ -19,7 +20,7 @@ export const UserProfile: React.FC = () => {
   const [user] = useAuthState(auth);
   const [signOut] = useSignOut(auth);
 
-  const modalsHanderStore = useStore((s) => s.modalsHanderStore);
+  const modalsHandlerStore = useStore((s) => s.modalsHandlerStore);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -66,14 +67,43 @@ export const UserProfile: React.FC = () => {
           <Button
             fullWidth
             variant="contained"
-            onClick={() => modalsHanderStore.setOpenPricingModal(true)}>
+            size="large"
+            onClick={() => {
+              setAnchorEl(null);
+              modalsHandlerStore.setOpenPricingModal(true);
+            }}>
             Start free trial
           </Button>
         </Box>
 
         <Divider />
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+            modalsHandlerStore.setOpenPricingModal(true);
+          }}>
+          <ListItemIcon>
+            <img src="/user-profile/my-games.svg" alt="" />
+          </ListItemIcon>
+          <ListItemText>My games</ListItemText>
 
-        <MenuItem onClick={signOut}>
+          <span>PRO</span>
+        </MenuItem>
+
+        <MenuItem>
+          <ListItemIcon>
+            <img src="/user-profile/spectator-mode.svg" alt="" />
+          </ListItemIcon>
+          <ListItemText>Spectator mode</ListItemText>
+
+          <Switch />
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+            signOut();
+          }}>
           <ListItemIcon>
             <ArrowRightOnRectangleIcon />
           </ListItemIcon>

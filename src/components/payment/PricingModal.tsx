@@ -3,12 +3,12 @@ import { StyledModal } from '@/components/shared/StyledModal';
 import { useStore } from '@/hooks/useStore';
 
 export const PricingModal: React.FC = observer(() => {
-  const modalsHanderStore = useStore((s) => s.modalsHanderStore);
+  const modalsHandlerStore = useStore((s) => s.modalsHandlerStore);
 
   return (
     <StyledModal
-      open={modalsHanderStore.openPricingModal}
-      hideModal={() => modalsHanderStore.setOpenPricingModal(false)}
+      open={modalsHandlerStore.openPricingModal}
+      hideModal={() => modalsHandlerStore.setOpenPricingModal(false)}
       title="Upgrade Planning Poker Online"
       className="w-full h-full">
       Soon...

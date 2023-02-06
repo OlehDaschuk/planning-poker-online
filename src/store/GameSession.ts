@@ -17,15 +17,14 @@ export class GameSessionStore {
     makeAutoObservable(this);
   }
 
-  // TODO: fix type error
-  *onSessionCreation<
-    D extends Partial<ISession>,
-    T extends DocumentReference<D> | DocumentSnapshot<D>
-  >(name: string): Generator<Promise<T>> {
+  *onSessionCreation<D = Partial<ISession>, T = DocumentReference<D>>(
+    name: string,
+    deck: IDeck
+  ): Generator<Promise<T>, string> {
     try {
-      const sesionRef = yield addDoc<D>(collection(firestore, 'session'), { name });
+      const sesionRef = yield addDoc<D>(collection(firestore, 'session'), { name, deck });
 
-      const sesion = yield getDoc<D>(doc(firestore, 'users', sesionRef.id));
+      return sesionRef!.id;
     } catch (e) {
       console.error('Error adding/getting document: ', e);
     }

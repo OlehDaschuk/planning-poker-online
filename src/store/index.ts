@@ -1,13 +1,13 @@
 import { createContext } from 'react';
 
 import { gameSessionStore } from './GameSession';
-import { modalsHanderStore } from './ModalsHandlerStore';
+import { modalsHandlerStore } from './ModalsHandlerStore';
 import { decksStore } from './Decks';
 
 export const rootStore = {
   gameSessionStore,
   decksStore,
-  modalsHanderStore,
+  modalsHandlerStore,
 };
 
 export type RootState = typeof rootStore;

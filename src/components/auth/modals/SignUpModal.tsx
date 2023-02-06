@@ -36,7 +36,7 @@ export const SignUpModal: React.FC = observer(() => {
   const [sendSignInLinkToEmail, sendingLinkToEmail] = useSendSignInLinkToEmail(auth);
   const [signInWithGoogle] = useSignInWithGoogle(auth);
 
-  const modalsHanderStore = useStore((s) => s.modalsHanderStore);
+  const modalsHandlerStore = useStore((s) => s.modalsHandlerStore);
 
   const {
     register,
@@ -52,8 +52,8 @@ export const SignUpModal: React.FC = observer(() => {
 
   return (
     <StyledModal
-      open={modalsHanderStore.openSignUpModal}
-      hideModal={() => modalsHanderStore.setOpenSignUpModal(false)}
+      open={modalsHandlerStore.openSignUpModal}
+      hideModal={() => modalsHandlerStore.setOpenSignUpModal(false)}
       title="Sign up"
       className="w-[440px]">
       <Button
@@ -63,7 +63,7 @@ export const SignUpModal: React.FC = observer(() => {
         variant="contained"
         sx={{ display: 'flex' }}
         onClick={() => {
-          modalsHanderStore.setOpenSignUpModal(false);
+          modalsHandlerStore.setOpenSignUpModal(false);
           signInWithGoogle();
         }}>
         <span className="grow">Sign up with Google</span>
@@ -118,8 +118,8 @@ export const SignUpModal: React.FC = observer(() => {
         <button
           className="text-[#3993ff] font-bold"
           onClick={() => {
-            modalsHanderStore.setOpenSignUpModal(false);
-            modalsHanderStore.setOpenLoginModal(true);
+            modalsHandlerStore.setOpenSignUpModal(false);
+            modalsHandlerStore.setOpenLoginModal(true);
           }}>
           Login
         </button>

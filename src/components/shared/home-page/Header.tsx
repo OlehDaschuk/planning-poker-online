@@ -13,7 +13,7 @@ import { UserProfile } from '@/components/user/UserProfile';
 
 export const Header = () => {
   const [user, loading] = useAuthState(auth);
-  const modalsHanderStore = useStore((s) => s.modalsHanderStore);
+  const modalsHandlerStore = useStore((s) => s.modalsHandlerStore);
 
   return (
     <>
@@ -49,7 +49,7 @@ export const Header = () => {
                 display: 'flex',
                 alignItems: 'center',
               }}>
-              <Button variant="text" onClick={() => (modalsHanderStore.openPricingModal = true)}>
+              <Button variant="text" onClick={() => (modalsHandlerStore.openPricingModal = true)}>
                 Pricing
               </Button>
             </Box>
@@ -58,10 +58,10 @@ export const Header = () => {
               <UserProfile />
             ) : (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                <Button variant="text" onClick={() => (modalsHanderStore.openSignUpModal = true)}>
+                <Button variant="text" onClick={() => (modalsHandlerStore.openSignUpModal = true)}>
                   Sign Up
                 </Button>
-                <Button variant="text" onClick={() => (modalsHanderStore.openLoginModal = true)}>
+                <Button variant="text" onClick={() => (modalsHandlerStore.openLoginModal = true)}>
                   Login
                 </Button>
               </Box>

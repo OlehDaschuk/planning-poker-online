@@ -18,11 +18,12 @@ interface Inputs {
 }
 
 export const CreateNewGameForm: React.FC = observer(() => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const decksStore = useStore((s) => s.decksStore);
   const gameSessionStore = useStore((s) => s.gameSessionStore);
 
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -35,8 +36,11 @@ export const CreateNewGameForm: React.FC = observer(() => {
     // console.log('' + decksStore.currentDeck);
 
     // TODO: ....
-    await gameSessionStore.onSessionCreation(data.gameName);
-    router.push('/sessionId', `/${gameSessionStore.currentSession?.id}`);
+    const sessionId = await gameSessionStore.onSessionCreation(
+      data.gameName,
+      decksStore.currentDeck
+    );
+    router.push('/sessionId', `/${sessionId}`);
   };
   return (
     <>
