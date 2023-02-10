@@ -10,8 +10,6 @@ import { useStore } from '@/hooks/useStore';
 import { CreateCustomDeckForm } from '@/components/game/forms/CreateCustomDeckForm';
 import { StyledModal } from '@/components/shared/StyledModal';
 
-// export const deckObjectToString = (deck: IDeck) => `${deck.name} ( ${deck.values.join(', ')} )`;
-
 interface Inputs {
   gameName: string;
   votingSystem: IDeck;
@@ -20,26 +18,20 @@ interface Inputs {
 export const CreateNewGameForm: React.FC = observer(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const decksStore = useStore((s) => s.decksStore);
-  const gameSessionStore = useStore((s) => s.gameSessionStore);
+  const decksStore = useStore<'decksStore'>((s) => s.decksStore);
+  const gameSessionStore = useStore<'gameSessionStore'>((s) => s.gameSessionStore);
 
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
-
+  const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     if (!data.gameName.trim()) data.gameName = 'Planning poker online';
     console.log(data);
-    // console.log('' + decksStore.currentDeck);
 
-    // TODO: ....
     const sessionId = await gameSessionStore.onSessionCreation(
-      data.gameName,
+      data.gameName.trim(),
       decksStore.currentDeck
     );
+
     router.push('/sessionId', `/${sessionId}`);
   };
   return (

@@ -9,6 +9,7 @@ export interface IModalProps {
 }
 interface IStyledModalProps extends IModalProps {
   title: string;
+  showCloseIcon?: boolean;
   className?: HTMLAttributes<'div'>['className'];
   children?: React.ReactElement | React.ReactElement[] | string;
 }
@@ -21,8 +22,8 @@ export const StyledModal: React.FC<IStyledModalProps> = ({
   children,
 }) => {
   return (
-    <Dialog open={open} onClose={hideModal}>
-      <div className="fixed inset-0 bg-[rgba(26,41,53,.8)]" aria-hidden="true" />
+    <Dialog open={open} onClose={hideModal} className="z-20">
+      <div className="fixed inset-0 bg-[rgba(26,41,53,.8)] z-10" aria-hidden="true" />
 
       <Dialog.Panel
         className={

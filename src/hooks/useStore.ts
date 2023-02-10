@@ -1,12 +1,9 @@
 import { useContext } from 'react';
 
 import { RootStoreContext, RootState } from '@/store';
-import { DecksStore } from '@/store/Decks';
-import { GameSessionStore } from '@/store/GameSession';
-import { ModalsHandlerStore } from '@/store/ModalsHandlerStore';
 
-export const useStore = <T extends GameSessionStore | DecksStore | ModalsHandlerStore>(
-  query: (store: RootState) => T
+export const useStore = <TStore extends keyof RootState>(
+  query: (store: RootState) => RootState[TStore]
 ) => {
   const store = useContext(RootStoreContext);
   return query(store);

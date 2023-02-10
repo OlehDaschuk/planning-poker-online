@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, TextField, Alert, Box } from '@mui/material';
 
@@ -16,7 +16,8 @@ interface IProps {
 }
 
 export const CreateCustomDeckForm: React.FC<IProps> = ({ hideModal }) => {
-  const decksStore = useStore((s) => s.decksStore);
+  const decksStore = useStore<'decksStore'>((s) => s.decksStore);
+  const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
   const {
     watch,
@@ -76,7 +77,11 @@ export const CreateCustomDeckForm: React.FC<IProps> = ({ hideModal }) => {
           <p>This is a preview of how your deck will look like.</p>
         </div>
 
-        <Cards deckValues={watch('deckValues')} />
+        <Cards
+          selectedCard={selectedCard}
+          setSelectedCard={setSelectedCard}
+          deckValues={watch('deckValues')}
+        />
 
         <div className="flex gap-4 mt-8 h-12">
           <Button fullWidth variant="contained" className="bg-white" onClick={hideModal}>

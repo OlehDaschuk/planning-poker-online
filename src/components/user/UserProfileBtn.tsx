@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import {
   Avatar,
   Divider,
@@ -19,8 +20,9 @@ import { useStore } from '@/hooks/useStore';
 export const UserProfileBtn: React.FC = () => {
   const [user] = useAuthState(auth);
   const [signOut] = useSignOut(auth);
+  const router = useRouter();
+  const modalsHandlerStore = useStore<'modalsHandlerStore'>((s) => s.modalsHandlerStore);
 
-  const modalsHandlerStore = useStore((s) => s.modalsHandlerStore);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -32,8 +34,8 @@ export const UserProfileBtn: React.FC = () => {
         aria-expanded={open ? 'true' : undefined}
         variant="text"
         startIcon={
-          <Avatar sx={{ width: 32, height: 32 }} src={user?.photoURL!} alt="user photo">
-            {user?.displayName!.charAt(0)}
+          <Avatar sx={{ width: 32, height: 32 }} src={user!.photoURL} alt="user photo">
+            {user?.displayName?.charAt(0)}
           </Avatar>
         }
         endIcon={<ChevronDownIcon width="16" />}
@@ -56,11 +58,14 @@ export const UserProfileBtn: React.FC = () => {
         sx={{ borderRadius: '8px' }}
         MenuListProps={{ sx: { width: '300px' } }}>
         <div className="pl-6 h-[120px] flex items-center">
-          <Avatar sx={{ width: 64, height: 64 }} src={user?.photoURL!} alt="user photo">
+          <Avatar sx={{ width: 64, height: 64 }} src={user!.photoURL} alt="user photo">
             {user?.displayName!.charAt(0)}
           </Avatar>
 
-          <div className="pl-4">{user!.displayName}</div>
+          <div className="pl-4">
+            <p>{user!.displayName}</p>
+            {user?.isAnonymous && <p>Guest user</p>}
+          </div>
         </div>
 
         <Box sx={{ px: '1rem', mb: '1rem' }}>
@@ -103,6 +108,7 @@ export const UserProfileBtn: React.FC = () => {
           onClick={() => {
             setAnchorEl(null);
             signOut();
+            if (router.route === '/[sessionId]') router.push('/');
           }}>
           <ListItemIcon>
             <ArrowRightOnRectangleIcon />

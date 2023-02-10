@@ -13,7 +13,7 @@ import { UserProfileBtn } from '@/components/user/UserProfileBtn';
 
 export const Header = () => {
   const [user, loading] = useAuthState(auth);
-  const modalsHandlerStore = useStore((s) => s.modalsHandlerStore);
+  const modalsHandlerStore = useStore<'modalsHandlerStore'>((s) => s.modalsHandlerStore);
 
   return (
     <>
@@ -67,11 +67,15 @@ export const Header = () => {
               </Box>
             )}
 
-            <Link className="ml-6" href="/new-game">
-              <Button variant="contained" sx={{ height: '3rem', borderRadius: 2, fontWeight: 700 }}>
-                Start new game
-              </Button>
-            </Link>
+            {Boolean(user) && (
+              <Link className="ml-6" href="/new-game">
+                <Button
+                  variant="contained"
+                  sx={{ height: '3rem', borderRadius: 2, fontWeight: 700 }}>
+                  Start new game
+                </Button>
+              </Link>
+            )}
           </Box>
         </div>
       </AppBar>
