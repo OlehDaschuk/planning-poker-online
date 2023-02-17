@@ -1,11 +1,12 @@
-import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
 import Button from '@mui/material/Button';
 
-import Footer from '@/components/shared/Footer';
-import Header from '@/components/shared/Header';
+import { Header, Footer } from '@/components/shared/home-page';
+
+import { PricingModal } from '@/components/payment/PricingModal';
+import { LoginModal } from '@/components/auth/modals/LoginModal';
+import { SignUpModal } from '@/components/auth/modals/SignUpModal';
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
         <title>Planning poker online | Home</title>
       </Head>
 
-      <Header Logo={() => <Image width="189" height="40" src="/full-logo.svg" alt="logo" />} />
+      <Header />
 
       <main className="pt-40 flex">
         <section className="mx-auto flex items-center justify-between flex-wrap max-w-[108rem]">
@@ -25,8 +26,9 @@ export default function Home() {
             </div>
             <div>
               <Link href="/new-game">
-                {/* TODO */}
-                <Button>Start new game</Button>
+                <Button variant="contained" color="primary">
+                  Start new game
+                </Button>
               </Link>
             </div>
           </div>
@@ -49,6 +51,10 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      <PricingModal />
+      <LoginModal />
+      <SignUpModal />
     </>
   );
 }
